@@ -79,18 +79,20 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release ^
             -DBUILD_SHARED_LIBS=OFF ^
             -DCMAKE_INSTALL_PREFIX="cmake-build/${{ env.cmakeInstallationPath }}" -B./cmake-build &&^
-            cd cmake-build && cmake --build . --config Release && cmake --install . 
+            cd cmake-build && cmake --build . --config Release 
+            
+    # && cmake --install . 
             
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          directory: "libsoda-cxx/cmake-build/${{ env.cmakeInstallationPath }}"
+          directory: "libsoda-cxx/cmake-build"
           filename: "libsoda-cxx-${{ github.ref_name }}-${{ matrix.compiler.name }}.zip"
         
       - name: Release prebuilt
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "libsoda-cxx/cmake-build/${{ env.cmakeInstallationPath }}/libsoda-cxx-${{ github.ref_name }}-${{ matrix.compiler.name }}.zip"
+          artifacts: "libsoda-cxx/cmake-build/libsoda-cxx-${{ github.ref_name }}-${{ matrix.compiler.name }}.zip"
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
